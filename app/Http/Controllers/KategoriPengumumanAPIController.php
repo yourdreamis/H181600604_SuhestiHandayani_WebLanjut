@@ -16,7 +16,7 @@ class KategoriPengumumanAPIController extends Controller
     {
         $kategoriPengumuman=KategoriPengumuman::all();
 
-        return $kategoriPengumuman->toJson();
+        return $kategoriPengumuman;
     }
 
     

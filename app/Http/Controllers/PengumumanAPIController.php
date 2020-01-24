@@ -16,7 +16,7 @@ class PengumumanAPIController extends Controller
     {
         $pengumumans=Pengumuman::all();
 
-        return $pengumumans->toJson();
+        return $pengumumans;
     }
 
     
@@ -29,7 +29,9 @@ class PengumumanAPIController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input=$request->all();
+        $pengumuman=Pengumuman::create($input);
+        return $pengumuman;
     }
 
     /**
@@ -40,7 +42,8 @@ class PengumumanAPIController extends Controller
      */
     public function show($id)
     {
-        //
+        $pengumuman=Pengumuman::find($id);
+        return $pengumuman;
     }
 
     
@@ -54,7 +57,15 @@ class PengumumanAPIController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input=$request->all();
+        $pengumuman=Pengumuman::find($id);
+
+        if (empty ($pengumuman)){
+            return response()->json(['message'=>'data tidak ditemukan'], 404);
+        }
+
+        $pengumuman->update($input);
+        return response()->json($pengumuman);
     }
 
     /**
@@ -65,6 +76,13 @@ class PengumumanAPIController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $pengumuman=Pengumuman::find($id);
+
+        if (empty($pengumuman)){
+            return response()->json(['message'=>'data tidak ditemukan'], 404);
+        }
+
+        $pengumuman->delete();
+        return response()->json(['message'=>'data telah dihapus']);
     }
 }

@@ -16,7 +16,7 @@ class BeritaAPIController extends Controller
     {
         $beritas=Berita::all();
 
-        return $beritas->toJson();
+        return $beritas;
     }
 
 
@@ -28,7 +28,9 @@ class BeritaAPIController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input=$request->all();
+        $berita=Berita::create($input);
+        return $berita;
     }
 
     /**
@@ -39,7 +41,8 @@ class BeritaAPIController extends Controller
      */
     public function show($id)
     {
-       //
+        $berita=Berita::find($id);
+        return $berita;
     }
 
   
@@ -53,7 +56,15 @@ class BeritaAPIController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input=$request->all();
+        $berita=Berita::find($id);
+
+        if (empty ($berita)){
+            return response()->json(['message'=>'data tidak ditemukan'], 404);
+        }
+
+        $berita->update($input);
+        return response()->json($berita);
     }
 
     /**
@@ -64,6 +75,13 @@ class BeritaAPIController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $berita=Berita::find($id);
+
+        if (empty($berita)){
+            return response()->json(['message'=>'data tidak ditemukan'], 404);
+        }
+
+        $berita->delete();
+        return response()->json(['message'=>'data telah dihapus']);
     }
 }

@@ -16,7 +16,7 @@ class KategoriArtikelAPIController extends Controller
     {
         $kategoriArtikel=KategoriArtikel::all();
 
-        return $kategoriArtikel->toJson();
+        return $kategoriArtikel;
     }
 
     
@@ -29,7 +29,9 @@ class KategoriArtikelAPIController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input=$request->all();
+        $kategoriArtikel=KategoriArtikel::create($input);
+        return $kategoriArtikel;
     }
 
     /**
@@ -40,7 +42,8 @@ class KategoriArtikelAPIController extends Controller
      */
     public function show($id)
     {
-        //
+        $kategoriArtikel=KategoriArtikel::find($id);
+        return $kategoriArtikel;
     }
 
 
@@ -53,7 +56,15 @@ class KategoriArtikelAPIController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input=$request->all();
+        $kategoriArtikel=KategoriArtikel::find($id);
+
+        if (empty ($kategoriArtikel)){
+            return response()->json(['message'=>'data tidak ditemukan'], 404);
+        }
+
+        $kategoriArtikel->update($input);
+        return response()->json($kategoriArtikel);
     }
 
     /**
@@ -64,6 +75,13 @@ class KategoriArtikelAPIController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $kategoriArtikel=KategoriArtikel::find($id);
+
+        if (empty($kategoriArtikel)){
+            return response()->json(['message'=>'data tidak ditemukan'], 404);
+        }
+
+        $kategoriArtikel->delete();
+        return response()->json(['message'=>'data telah dihapus']);
     }
 }

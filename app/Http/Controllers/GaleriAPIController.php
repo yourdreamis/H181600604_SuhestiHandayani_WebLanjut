@@ -16,7 +16,7 @@ class GaleriAPIController extends Controller
     {
         $galeris=Galeri::all();
 
-        return $galeris->toJson();
+        return $galeris;
     }
 
    
@@ -28,7 +28,9 @@ class GaleriAPIController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input=$request->all();
+        $galeri=Galeri::create($input);
+        return $galeri;
     }
 
     /**
@@ -39,7 +41,8 @@ class GaleriAPIController extends Controller
      */
     public function show($id)
     {
-        //
+        $galeri=Galeri::find($id);
+        return $galeri;
     }
 
     
@@ -52,7 +55,15 @@ class GaleriAPIController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input=$request->all();
+        $galeri=Galeri::find($id);
+
+        if (empty ($galeri)){
+            return response()->json(['message'=>'data tidak ditemukan'], 404);
+        }
+
+        $galeri->update($input);
+        return response()->json($galeri);
     }
 
     /**
@@ -63,6 +74,13 @@ class GaleriAPIController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $galeri=Galeri::find($id);
+
+        if (empty($galeri)){
+            return response()->json(['message'=>'data tidak ditemukan'], 404);
+        }
+
+        $galeri->delete();
+        return response()->json(['message'=>'data telah dihapus']);
     }
 }

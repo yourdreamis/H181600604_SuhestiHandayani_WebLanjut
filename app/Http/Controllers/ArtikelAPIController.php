@@ -17,7 +17,7 @@ class ArtikelAPIController extends Controller
     {
         $artikels=Artikel::all();
 
-        return $artikels->toJson();
+        return $artikels;
     }
 
    //tidak dipakai create dan edit//
@@ -30,7 +30,9 @@ class ArtikelAPIController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input=$request->all();
+        $artikel=Artikel::create($input);
+        return $artikel;
     }
 
     /**
@@ -41,7 +43,8 @@ class ArtikelAPIController extends Controller
      */
     public function show($id)
     {
-        //
+        $artikel=Artikel::find($id);
+        return $artikel;
     }
 
   
@@ -55,7 +58,15 @@ class ArtikelAPIController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input=$request->all();
+        $artikel=Artikel::find($id);
+
+        if (empty ($artikel)){
+            return response()->json(['message'=>'data tidak ditemukan'], 404);
+        }
+
+        $artikel->update($input);
+        return response()->json($artikel);
     }
 
     /**
@@ -66,6 +77,13 @@ class ArtikelAPIController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $artikel=Artikel::find($id);
+
+        if (empty($artikel)){
+            return response()->json(['message'=>'data tidak ditemukan'], 404);
+        }
+
+        $artikel->delete();
+        return response()->json(['message'=>'data telah dihapus']);
     }
 }
